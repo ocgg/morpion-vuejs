@@ -24,8 +24,7 @@ const cellClick = (row, col) => {
   }
 
   board[row][col] = currentSign
-
-  // erase last history entries if user play after cancel
+  // erase last history entries if user plays after cancel
   if (currentHistoryIndex.value !== history.length - 1) {
     history.length = currentHistoryIndex.value + 1
   }
@@ -62,12 +61,14 @@ const updateCurrentHistoryIndex = (indexChange) => {
   </div>
 
   <div class="time-travel">
+    <!-- cancel button -->
     <button
       :disabled="currentHistoryIndex === 0"
       @click="updateCurrentHistoryIndex(-1)"
     >
       &larr;
     </button>
+    <!-- redo button -->
     <button
       :disabled="currentHistoryIndex === history.length - 1"
       @click="updateCurrentHistoryIndex(1)"
