@@ -3,17 +3,11 @@ import GameBoard from './components/GameBoard.vue'
 </script>
 
 <template>
-  <header>
-    <h1>Coucou</h1>
-  </header>
-
   <main>
+    <h1>Morpion en Vue.js</h1>
     <GameBoard />
   </main>
 </template>
 
 <style scoped>
-h1 {
-  margin: 1rem auto;
-}
 </style>
