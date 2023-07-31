@@ -15,7 +15,7 @@ describe('GameBoard.vue: basic click behavior', () => {
     expect(wrapper.vm.currentSign).toBe('O')
   })
   
-  it('Nothing should happen if click on non-empty cell', async () => {
+  it('Nothing should happen if non-empty cell is clicked', async () => {
     await firstCell.trigger('click')
     expect(wrapper.vm.board[0][0]).toBe('X')
     expect(wrapper.vm.currentSign).toBe('O')

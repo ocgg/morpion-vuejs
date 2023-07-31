@@ -29,14 +29,14 @@ const cellClick = (row, col) => {
   if (currentHistoryIndex.value !== history.length - 1) {
     history.length = currentHistoryIndex.value + 1
   }
-  // map & slice return new arrays, for history not to stock references
+  // map & slice return new arrays, for [history] not to stock references
   history.push(board.map((array) => array.slice()))
   updateCurrentHistoryIndex(1)
 }
 
 const updateCurrentHistoryIndex = (indexChange) => {
   currentHistoryIndex.value += indexChange
-  // map & slice return new arrays, for board not to stock references
+  // map & slice return new arrays, for [board] not to stock references
   board = history[currentHistoryIndex.value].map((array) => array.slice())
   currentSign = currentSign == 'X' ? 'O' : 'X'
 }
@@ -45,19 +45,19 @@ const updateCurrentHistoryIndex = (indexChange) => {
 <template>
   <div id="board">
     <div class="row">
-      <GameCell @click="cellClick(0, 0)" :content="history[currentHistoryIndex][0][0]" />
-      <GameCell @click="cellClick(0, 1)" :content="history[currentHistoryIndex][0][1]" />
-      <GameCell @click="cellClick(0, 2)" :content="history[currentHistoryIndex][0][2]" />
+      <GameCell @click="cellClick(0, 0)" :content="board[0][0]" />
+      <GameCell @click="cellClick(0, 1)" :content="board[0][1]" />
+      <GameCell @click="cellClick(0, 2)" :content="board[0][2]" />
     </div>
     <div class="row">
-      <GameCell @click="cellClick(1, 0)" :content="history[currentHistoryIndex][1][0]" />
-      <GameCell @click="cellClick(1, 1)" :content="history[currentHistoryIndex][1][1]" />
-      <GameCell @click="cellClick(1, 2)" :content="history[currentHistoryIndex][1][2]" />
+      <GameCell @click="cellClick(1, 0)" :content="board[1][0]" />
+      <GameCell @click="cellClick(1, 1)" :content="board[1][1]" />
+      <GameCell @click="cellClick(1, 2)" :content="board[1][2]" />
     </div>
     <div class="row">
-      <GameCell @click="cellClick(2, 0)" :content="history[currentHistoryIndex][2][0]" />
-      <GameCell @click="cellClick(2, 1)" :content="history[currentHistoryIndex][2][1]" />
-      <GameCell @click="cellClick(2, 2)" :content="history[currentHistoryIndex][2][2]" />
+      <GameCell @click="cellClick(2, 0)" :content="board[2][0]" />
+      <GameCell @click="cellClick(2, 1)" :content="board[2][1]" />
+      <GameCell @click="cellClick(2, 2)" :content="board[2][2]" />
     </div>
   </div>
 
@@ -68,7 +68,6 @@ const updateCurrentHistoryIndex = (indexChange) => {
     >
       &larr;
     </button>
-    
     <button
       :disabled="currentHistoryIndex === history.length - 1"
       @click="updateCurrentHistoryIndex(1)"
