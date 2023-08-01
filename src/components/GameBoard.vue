@@ -2,7 +2,7 @@
 import { ref } from 'vue'
 import GameCell from './GameCell.vue'
 
-let history = [
+const history = [
   [
     [null, null, null],
     [null, null, null],
@@ -14,15 +14,28 @@ let board = [
   [null, null, null],
   [null, null, null]
 ]
+const winningCombinations = [
+  // rows
+  [ { row: 0, col: 0 }, { row: 0, col: 1 }, { row: 0, col: 2 } ],
+  [ { row: 1, col: 0 }, { row: 1, col: 1 }, { row: 1, col: 2 } ],
+  [ { row: 2, col: 0 }, { row: 2, col: 1 }, { row: 2, col: 2 } ],
+  // columns
+  [ { row: 0, col: 0 }, { row: 1, col: 0 }, { row: 2, col: 0 } ],
+  [ { row: 0, col: 1 }, { row: 1, col: 1 }, { row: 2, col: 1 } ],
+  [ { row: 0, col: 2 }, { row: 1, col: 2 }, { row: 2, col: 2 } ],
+  // diagonals
+  [ { row: 0, col: 0 }, { row: 1, col: 1 }, { row: 2, col: 2 } ],
+  [ { row: 0, col: 2 }, { row: 1, col: 1 }, { row: 2, col: 0 } ]
+]
 
 const currentHistoryIndex = ref(0)
 let currentSign = 'X'
+let winner      = null
 
 const cellClick = (row, col) => {
   if (history[currentHistoryIndex.value][row][col]) {
     return
   }
-
   board[row][col] = currentSign
   // erase last history entries if user plays after cancel
   if (currentHistoryIndex.value !== history.length - 1) {
@@ -42,29 +55,36 @@ const moveCurrentHistoryIndexBy = (offset) => {
 }
 
 const checkIfPlayerWon = () => {
-  const winningLines = {
-    rows: board,
-    columns: [
-      [board[0][0], board[1][0], board[2][0]],
-      [board[0][1], board[1][1], board[2][1]],
-      [board[0][2], board[1][2], board[2][2]]
-    ],
-    diagonals: [
-      [board[0][0], board[1][1], board[2][2]],
-      [board[0][2], board[1][1], board[2][0]]
-    ]
-  }
-  for (const lines in winningLines) {
-    winningLines[lines].forEach((line, index) => {
-      if (line[0] && line[0] === line[1] && line[0] === line[2]) {
-        highlightWinningLine(lines, index)
-      }
-    })
-  }
+  winningCombinations.forEach ((coords) => {
+    const cell0 = board[coords[0].row][coords[0].col]
+    const cell1 = board[coords[1].row][coords[1].col]
+    const cell2 = board[coords[2].row][coords[2].col]
+    if (cell0 && cell0 === cell1 && cell0 === cell2) {
+      winner = cell0
+      highlightWinningLine(coords)
+      stopGame()
+    }
+  })
 }
 
-const highlightWinningLine = (lines, colId) => {
-  console.log(lines + ' ' + colId)
+const highlightWinningLine = (coords) => {
+  coords.forEach ((coord) => {
+    const cell  = document.getElementById(`${coord.row}${coord.col}`)
+    cell.classList.add('winning-cell')
+  })
+}
+
+const stopGame = () => {
+  const board         = document.getElementById('board')
+  const timeTravelDiv = document.getElementById('time-travel')
+  const playAgainBtn  = document.getElementById('play-again')
+  board.classList.add('stop-game')
+  timeTravelDiv.classList.add('d-none')
+  playAgainBtn.classList.remove('d-none')
+}
+
+const playAgain = () => {
+  window.location.reload()
 }
 </script>
 
@@ -87,7 +107,7 @@ const highlightWinningLine = (lines, colId) => {
     </div>
   </div>
 
-  <div class="time-travel">
+  <div id="time-travel">
     <!-- cancel button -->
     <button
       :disabled="currentHistoryIndex === 0"
@@ -103,6 +123,10 @@ const highlightWinningLine = (lines, colId) => {
       &rarr;
     </button>
   </div>
+  <div id="play-again" class="d-none">
+    <p class="win-message">"{{ winner }}" has won !!</p>
+    <button @click="playAgain">Play again</button>
+  </div>
 </template>
 
 <style scoped>
@@ -110,13 +134,27 @@ const highlightWinningLine = (lines, colId) => {
   display: flex;
 }
 
-.time-travel {
+#time-travel {
   margin: 1em auto;
   display: flex;
   justify-content: center;
   gap: 1em;
 }
-.time-travel button {
+button {
   padding: 0.2em 1.5em;
+}
+.winning-cell {
+  font-weight: bold;
+  background-color: lightgreen;
+}
+.stop-game {
+  pointer-events: none;
+}
+.d-none {
+  display: none !important;
+}
+.win-message {
+  font-weight: bold;
+  margin-bottom: 1.5em;
 }
 </style>

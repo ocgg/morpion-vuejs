@@ -4,7 +4,7 @@ import GameBoard from './components/GameBoard.vue'
 
 <template>
   <main>
-    <h1>Morpion en Vue.js</h1>
+    <h1>Vue.js Morpion</h1>
     <GameBoard />
   </main>
 </template>
