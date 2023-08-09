@@ -8,10 +8,11 @@ let board = [
   [null, null, null]
 ];
 
-const history = [ board.map(row => row.slice()) ];
+const history             = [ board.map(array => array.slice()) ];
 const currentHistoryIndex = ref(0);
-let currentSign           = 'X';
-let winner                = null;
+
+let currentSign = 'X';
+let winner      = null;
 
 const boardDiv      = ref(null);
 const timeTravelDiv = ref(null);
@@ -74,9 +75,9 @@ const highlightWinningLine = (coords) => {
 }
 
 const stopGame = () => {
-  boardDiv.value.classList.add('stop-game');
-  timeTravelDiv.value.classList.add('d-none');
-  playAgainBtn.value.classList.remove('d-none');
+  boardDiv      .value.classList.add('stop-game');
+  timeTravelDiv .value.classList.add('d-none');
+  playAgainBtn  .value.classList.remove('d-none');
 }
 
 const playAgain = () => {
