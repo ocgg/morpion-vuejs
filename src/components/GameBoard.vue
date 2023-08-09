@@ -32,6 +32,10 @@ const currentHistoryIndex = ref(0);
 let currentSign           = 'X';
 let winner                = null;
 
+const boardDiv      = ref(null);
+const timeTravelDiv = ref(null);
+const playAgainBtn  = ref(null);
+
 const cellClick = (row, col) => {
   if (history[currentHistoryIndex.value][row][col]) {
     return;
@@ -75,12 +79,9 @@ const highlightWinningLine = (coords) => {
 }
 
 const stopGame = () => {
-  const board         = document.getElementById('board');
-  const timeTravelDiv = document.getElementById('time-travel');
-  const playAgainBtn  = document.getElementById('play-again');
-  board.classList.add('stop-game');
-  timeTravelDiv.classList.add('d-none');
-  playAgainBtn.classList.remove('d-none');
+  boardDiv.value.classList.add('stop-game');
+  timeTravelDiv.value.classList.add('d-none');
+  playAgainBtn.value.classList.remove('d-none');
 }
 
 const playAgain = () => {
@@ -89,7 +90,7 @@ const playAgain = () => {
 </script>
 
 <template>
-  <div id="board">
+  <div ref="boardDiv">
     <div class="row">
       <GameCell id="00" @click="cellClick(0, 0)" :content="board[0][0]" />
       <GameCell id="01" @click="cellClick(0, 1)" :content="board[0][1]" />
@@ -107,7 +108,7 @@ const playAgain = () => {
     </div>
   </div>
 
-  <div id="time-travel">
+  <div ref="timeTravelDiv">
     <!-- cancel button -->
     <button
       :disabled="currentHistoryIndex === 0"
@@ -123,7 +124,7 @@ const playAgain = () => {
       &rarr;
     </button>
   </div>
-  <div id="play-again" class="d-none">
+  <div ref="playAgainBtn" class="d-none">
     <p class="win-message">"{{ winner }}" has won !!</p>
     <button @click="playAgain">Play again</button>
   </div>
