@@ -2,18 +2,21 @@
 import { ref } from 'vue'
 import GameCell from './GameCell.vue'
 
-const history = [
-  [
-    [null, null, null],
-    [null, null, null],
-    [null, null, null]
-  ]
-];
 let board = [
   [null, null, null],
   [null, null, null],
   [null, null, null]
 ];
+
+const history = [ board.map(row => row.slice()) ];
+const currentHistoryIndex = ref(0);
+let currentSign           = 'X';
+let winner                = null;
+
+const boardDiv      = ref(null);
+const timeTravelDiv = ref(null);
+const playAgainBtn  = ref(null);
+
 const winningCombinations = [
   // rows
   [ { row: 0, col: 0 }, { row: 0, col: 1 }, { row: 0, col: 2 } ],
@@ -27,14 +30,6 @@ const winningCombinations = [
   [ { row: 0, col: 0 }, { row: 1, col: 1 }, { row: 2, col: 2 } ],
   [ { row: 0, col: 2 }, { row: 1, col: 1 }, { row: 2, col: 0 } ]
 ];
-
-const currentHistoryIndex = ref(0);
-let currentSign           = 'X';
-let winner                = null;
-
-const boardDiv      = ref(null);
-const timeTravelDiv = ref(null);
-const playAgainBtn  = ref(null);
 
 const cellClick = (row, col) => {
   if (history[currentHistoryIndex.value][row][col]) {
